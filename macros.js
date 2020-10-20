@@ -16,6 +16,10 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 const Macros = class {
+  static from ([proteins, carbs, fats]) {
+    return new Macros(proteins, carbs, fats)
+  }
+
   constructor (proteins, carbs, fats) {
     this.proteins = proteins
     this.carbs = carbs
@@ -34,6 +38,10 @@ const Macros = class {
     )
   }
 
+  with (macros) {
+    return this.add(macros)
+  }
+
   subtract (macros) {
     return this.add(macros.times(-1))
   }
@@ -44,6 +52,10 @@ const Macros = class {
       n * this.carbs,
       n * this.fats
     )
+  }
+
+  servings (n) {
+    return this.times(n)
   }
 }
 

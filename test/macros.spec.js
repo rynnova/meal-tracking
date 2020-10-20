@@ -21,9 +21,18 @@ const { expect } = require('chai')
 describe('Macros', () => {
   it('will take 3 values and create a macronutrient profile item', () => {
     const macros = new Macros(24, 3, 1)
-    expect(macros.proteins).to.equal(24)
-    expect(macros.carbs).to.equal(3)
-    expect(macros.fats).to.equal(1)
+    expectMacrosToEqual(macros, [24, 3, 1])
+  })
+
+  const expectMacrosToEqual = (value, [proteins, carbs, fats]) => {
+    expect(value.proteins).to.equal(proteins)
+    expect(value.carbs).to.equal(carbs)
+    expect(value.fats).to.equal(fats)
+  }
+
+  it('will construct a macro record from an array', () => {
+    const macros = Macros.from([5, 27, 2.5])
+    expectMacrosToEqual(macros, [5, 27, 2.5])
   })
 
   it('will calculate protein-only calories', () => {
@@ -53,25 +62,32 @@ describe('Macros', () => {
     const first = new Macros(1, 2, 3)
     const second = new Macros(4, 5, 6)
     const result = first.add(second)
-    expect(result.proteins).to.equal(5)
-    expect(result.carbs).to.equal(7)
-    expect(result.fats).to.equal(9)
+    expectMacrosToEqual(result, [5, 7, 9])
+  })
+
+  it('has with as a synonym for add', () => {
+    const first = new Macros(7, 8, 9)
+    const second = new Macros(10, 11, 12)
+    const result = first.with(second)
+    expectMacrosToEqual(result, [17, 19, 21])
   })
 
   it('will subtract macros', () => {
     const first = new Macros(10, 10, 10)
     const second = new Macros(1, 3, 5)
     const result = first.subtract(second)
-    expect(result.proteins).to.equal(9)
-    expect(result.carbs).to.equal(7)
-    expect(result.fats).to.equal(5)
+    expectMacrosToEqual(result, [9, 7, 5])
   })
 
   it('will multiply by scalar values', () => {
     const original = new Macros(1, 10, 0)
     const result = original.times(2)
-    expect(result.proteins).to.equal(2)
-    expect(result.carbs).to.equal(20)
-    expect(result.fats).to.equal(0)
+    expectMacrosToEqual(result, [2, 20, 0])
+  })
+
+  it('has "servings" as a synonym for "times"', () => {
+    const original = new Macros(5, 27, 2.5)
+    const result = original.servings(3)
+    expectMacrosToEqual(result, [15, 81, 7.5])
   })
 })
