@@ -4,7 +4,7 @@
   "description": "A meal tracking library",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -w"
+    "test": "nyc mocha",
     "lint": "eslint --fix"
   },
   "author": "Ryan Y",
